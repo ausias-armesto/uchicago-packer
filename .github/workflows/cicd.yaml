@@ -14,10 +14,7 @@ jobs:
       run: |
           echo "Building on branch ${{ github.ref }}"
           if [[ "${{ github.ref }}" == "refs/heads/develop" ]]; then echo "AWS_REGION=eu-west-1" >> $GITHUB_ENV; echo "ENVIRONMENT_NAME=dev" >> $GITHUB_ENV; fi
-          if [[ "${{ github.ref }}" == "refs/heads/master" ]]; then echo "AWS_REGION=eu-west-2" >> $GITHUB_ENV; echo "ENVIRONMENT_NAME=pre" >> $GITHUB_ENV; fi          
-          echo "Building on region ${{ env.AWS_REGION }}"
-          echo "Building on environment ${{ env.ENVIRONMENT_NAME }}" 
-          cat $GITHUB_ENV
+          if [[ "${{ github.ref }}" == "refs/heads/master" ]]; then echo "AWS_REGION=eu-west-2" >> $GITHUB_ENV; echo "ENVIRONMENT_NAME=pre" >> $GITHUB_ENV; fi           
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
@@ -34,7 +31,7 @@ jobs:
           aws ec2 delete-snapshot --snapshot-id=$SNAPSHOT_ID_OS
         fi
     - name: Get Mysql Root password
-      run: |        
+      run: |
         MYSQL_ROOT_PASSWORD=`aws secretsmanager get-secret-value --secret-id root-mysql-uchicago-${{ env.ENVIRONMENT_NAME }} --query SecretString --output text | jq -r ".password"`
         echo "MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD" >> $GITHUB_ENV;
     - name: Build AMI

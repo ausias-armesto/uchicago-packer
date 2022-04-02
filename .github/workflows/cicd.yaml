@@ -13,8 +13,8 @@ jobs:
     - name: Identifying Branch
       run: |
           echo "Building on branch ${{ github.ref }}"
-          if [[ "${{ github.ref }}" == "refs/heads/develop" ]]; then echo "AWS_REGION=eu-west-1" >> $GITHUB_ENV; echo "ENVIRONMENT_NAME=dev"; >> $GITHUB_ENV; fi
-          if [[ "${{ github.ref }}" == "refs/heads/master" ]]; then echo "AWS_REGION=eu-west-2" >> $GITHUB_ENV; echo "ENVIRONMENT_NAME=pre"; >> $GITHUB_ENV; fi          
+          if [[ "${{ github.ref }}" == "refs/heads/develop" ]]; then echo "AWS_REGION=eu-west-1" >> $GITHUB_ENV; echo "ENVIRONMENT_NAME=dev" >> $GITHUB_ENV; fi
+          if [[ "${{ github.ref }}" == "refs/heads/master" ]]; then echo "AWS_REGION=eu-west-2" >> $GITHUB_ENV; echo "ENVIRONMENT_NAME=pre" >> $GITHUB_ENV; fi          
           echo "Building on region ${{ env.AWS_REGION }}"
           echo "Building on environment ${{ env.ENVIRONMENT_NAME }}" 
           cat $GITHUB_ENV

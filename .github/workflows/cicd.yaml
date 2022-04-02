@@ -12,9 +12,9 @@ jobs:
       uses: actions/checkout@v2
     - name: Identifying Branch
       run: |
-          echo "Building on environment ${{ github.ref }}"
+          echo "Building on branch ${{ github.ref }}"
           if [[ "${{ github.ref }}" == "refs/heads/develop" ]]; then echo "AWS_REGION=eu-west-1" >> $GITHUB_ENV; echo "ENVIRONMENT_NAME=dev"; >> $GITHUB_ENV; fi
-          if [[ "${{ github.ref }}" == "refs/heads/master" ]]; then echo "AWS_REGION=eu-west-2" >> $GITHUB_ENV; echo "ENVIRONMENT_NAME=pre"; >> $GITHUB_ENV; fi
+          if [[ "${{ github.ref }}" == "refs/heads/master" ]]; then echo "AWS_REGION=eu-west-2" >> $GITHUB_ENV; echo "ENVIRONMENT_NAME=pre"; >> $GITHUB_ENV; fi          
           echo "Building on region ${{ env.AWS_REGION }}"
           echo "Building on environment ${{ env.ENVIRONMENT_NAME }}"       
     - name: Configure AWS Credentials
@@ -31,17 +31,16 @@ jobs:
           SNAPSHOT_ID_OS=`aws ec2 describe-images --filters Name=tag:Type,Values=uchicago-mysql  --output text --query "Images[0].BlockDeviceMappings[?(@.DeviceName == '/dev/xvda')].Ebs.SnapshotId"`
           aws ec2 deregister-image --image-id=$AMI_ID
           aws ec2 delete-snapshot --snapshot-id=$SNAPSHOT_ID_OS
-        fi 
-    - name: Init Packer
-      uses: hashicorp/packer-github-actions@master
-      with:
-        command: init
-        target: packer.json
+        fi
+    - name: Get Mysql Root password
+      run: |        
+        MYSQL_ROOT_PASSWORD=`aws secretsmanager get-secret-value --secret-id root-mysql-uchicago-${{ env.ENVIRONMENT_NAME }} --query SecretString --output text | jq -r ".password"`
+        echo "MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD" >> $GITHUB_ENV;
     - name: Build AMI
       uses: hashicorp/packer-github-actions@master
       with:
         command: build
-        arguments: "--var environmentName=${{ env.ENVIRONMENT_NAME }}"
+        arguments: "--var environmentName=${{ env.ENVIRONMENT_NAME }} --var mysqlRootPassword=${{ env.MYSQL_ROOT_PASSWORD }} --var region=${{ env.AWS_REGION }}"
         target: packer.json
     - name: Tag resources
       run: |

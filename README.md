@@ -1,9 +1,8 @@
-# Build Infrastructure with AWS CDK Cloudformation
-
+# The Univerisity of Chicago - Devops Course - AWS MYSQL AMI 
 
 ## Introduction
 
-This repository has been created as part of the contents for the [Devops Course](https://online.professional.uchicago.edu/course/dtb-dev/) at the [University of Chicago](https://online.professional.uchicago.edu/) as an Teacher Assistant.
+This repository has been created as part of the contents for the [Devops Course](https://online.professional.uchicago.edu/course/dtb-dev/) at the [The Univerisity of Chicago](https://online.professional.uchicago.edu/) as an Teacher Assistant.
 
 The purpose of this repository is to show an example of how to use the Packer technology to create AWS AMI images. The AMI generated is based on an Amazon Linux 2 OS with MySql Community 5.7
 

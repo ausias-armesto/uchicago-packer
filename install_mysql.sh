@@ -2,17 +2,20 @@
 # Configure script runtime settings
 set -o errexit -o pipefail -o nounset
 #set -o xtrace
-
+#set -x
 # Updating packages
 echo Applying pending updates...
+sleep 10
 yum update -y
-
+sleep 10
 # Install common packages
 yum install -y jq
-
+sleep 10
 
 amazon-linux-extras install -y epel
-yum install -y https://dev.mysql.com/get/mysql57-community-release-el7-11.noarch.rpm
+sleep 10
+wget https://dev.mysql.com/get/mysql57-community-release-el7-11.noarch.rpm
+yum localinstall -y mysql57-community-release-el7-11.noarch.rpm
 rpm --import https://repo.mysql.com/RPM-GPG-KEY-mysql-2022
 yum install -y mysql-community-server
 

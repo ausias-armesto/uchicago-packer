@@ -27,7 +27,8 @@
           "virtualization-type": "hvm",
           "architecture": "x86_64",
           "name": "*amzn2-ami-hvm-2.0*-x86_64-gp2",
-          "root-device-type": "ebs"
+          "root-device-type": "ebs",
+          "platform": "Amazon Linux"
         },
         "owners": [
           "137112412989"
